@@ -1,0 +1,16 @@
+FROM harbor.cn/python/python:3.9-slim-buster
+
+# 设置工作目录
+WORKDIR /app
+
+# 将当前目录下的所有文件复制到工作目录
+COPY . /app
+
+# 安装依赖
+RUN pip install --no-cache-dir -r requirement.txt
+
+# 暴露端口（如果需要）
+# EXPOSE 6300
+
+# 定义运行时命令
+CMD ["python", "app.py"]
