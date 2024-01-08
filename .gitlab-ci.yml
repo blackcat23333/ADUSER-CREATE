@@ -1,0 +1,19 @@
+stages:
+  - build
+
+variables:
+  DOCKER_IMAGE_NAME: "harbor.cn/itservice/ldap3"
+  CURRENT_DATE: "v$(date +'%Y%m%d%H%M%S')"
+
+before_script:
+  - docker stop ldap3-container || true  # 停止之前运行的容器，忽略错误，因为可能没有之前的容器在运行
+  - docker rmi -f ldap3-container || true  # 删除之前的容器，忽略错误，因为可能没有之前的容器存在
+  - docker rm ldap3-container || true
+
+build:
+  stage: build
+  tags:
+    - ldap3
+  script:
+    - docker build -t $DOCKER_IMAGE_NAME -f Dockerfile.base .
+    - docker run -d -p 6300:6300 --name ldap3-container $DOCKER_IMAGE_NAME
